@@ -43,7 +43,7 @@ class GoogleTTSEngine(BaseTTSEngine):
             voice=tts.VoiceSelectionParams(
                 name=voice_name,
                 language_code=language_code,
-                model="gemini-3.1-flash-tts-preview",
+                model_name="gemini-3.1-flash-tts-preview",
             )
         )
         config_request = tts.StreamingSynthesizeRequest(streaming_config=streaming_config)
