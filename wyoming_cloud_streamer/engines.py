@@ -60,7 +60,7 @@ class GoogleTTSEngine(BaseTTSEngine):
             )
 
         # Announce LINEAR16 mono; Google produces LINEAR16 for streaming
-        sample_rate = getattr(cli_args, "sample_rate", 22050)
+        sample_rate = getattr(cli_args, "sample_rate", 24000)
         yield ("format", AudioFormat(rate=sample_rate, width=2, channels=1))
 
         # Forward audio bytes as chunks
