@@ -54,7 +54,7 @@ async def main() -> None:
                 voice_name = ""
                 voice_description = ""
                 if key == "google":
-                    voice_name = language.replace('_', '-', 1)+voice
+                    voice_name = language.replace('_', '-', 1)+"-"+voice
                     voice_description = "gemini_"+voice
                     attribution=Attribution(
                             name="Google", url="https://cloud.google.com/text-to-speech/docs/chirp3-hd"
