@@ -44,6 +44,11 @@ class GoogleTTSEngine(BaseTTSEngine):
                 name=voice_name,
                 language_code=language_code,
                 model_name="gemini-3.1-flash-tts-preview",
+            ),
+            voice_synthesis_config=tts.VoiceSynthesisConfig(
+                temperature=1,
+                top_p=0.95,
+                top_k=64,
             )
         )
         config_request = tts.StreamingSynthesizeRequest(streaming_config=streaming_config)
