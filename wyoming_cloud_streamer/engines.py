@@ -31,6 +31,11 @@ class GoogleTTSEngine(BaseTTSEngine):
         # Expect "xx-YY-..." and take first two parts
         parts = voice_name.split("-")
         return "-".join(parts[:2]) if len(parts) >= 2 else "en-US"
+    
+    def _voice_name_from_voice(self, voice_name: str) -> str:
+        # Expect "xx-YY-zzzz" and return "zzzz"
+        parts = voice_name.split("-")
+        return parts[-1] if parts else voice_name.strip()
 
     async def stream(
         self, text: str, voice_name: str, cli_args
@@ -41,14 +46,9 @@ class GoogleTTSEngine(BaseTTSEngine):
         # Build streaming config (first request must carry config)
         streaming_config = tts.StreamingSynthesizeConfig(
             voice=tts.VoiceSelectionParams(
-                name=voice_name,
+                name=self._voice_name_from_voice(voice_name),
                 language_code=language_code,
                 model_name="gemini-3.1-flash-tts-preview",
-            ),
-            voice_synthesis_config=tts.VoiceSynthesisConfig(
-                temperature=1,
-                top_p=0.95,
-                top_k=64,
             )
         )
         config_request = tts.StreamingSynthesizeRequest(streaming_config=streaming_config)
