@@ -158,9 +158,9 @@ class EngineRegistry:
     def pick(self, voice_name: str) -> Tuple[str, BaseTTSEngine, str]:
         """Return (provider, engine, normalized_voice) based on voice_name."""
         v = (voice_name or "").strip().lower()
-        if "-chirp3-hd-" in v:
-            return ("google", self._engines["google"], v)
-        elif "-openai-" in v:
+        if "-openai-" in v:
             return ("openai", self._engines["openai"], v)
+        else:
+            return ("google", self._engines["google"], v)
 
 ENGINE_REGISTRY = EngineRegistry()
