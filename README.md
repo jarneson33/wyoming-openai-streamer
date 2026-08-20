@@ -16,8 +16,8 @@ This project builds on [wyoming-piper](https://github.com/rhasspy/wyoming-piper)
     [![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Feslavnov%2Fwyoming-openai-streamer)
 
 1. Configure Wyoming OpenAI Streamer addon settings:
-    1. To use OpenAI, you need an API key, [get it here](https://platform.openai.com/settings/organization/api-keys)
-    2. Optional: set `openai_base_url` to use an OpenAI-compatible local provider instead of the default cloud endpoint
+    1. For OpenAI cloud, set an API key, [get it here](https://platform.openai.com/settings/organization/api-keys)
+    2. Optional: set `openai_base_url` to use an OpenAI-compatible local provider instead of the default cloud endpoint (API key can be left empty for local providers)
     3. Optional: set `speaking_rate` as speech speed multiplier (for example `0.8` slower, `1.0` normal, `1.25` faster)
     4. Optional: set `openai_voices` to a comma-separated list (example: `alloy,ash,my_custom_voice`)
     5. Optional: set `openai_languages` to a comma-separated list of locale codes (example: `en-US,fr-FR`)

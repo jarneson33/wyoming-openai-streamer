@@ -1,6 +1,6 @@
 name: Wyoming OpenAI Streamer
 slug: wyoming_openai_streamer
-version: "0.1.0"
+version: "0.1.1"
 description: Wyoming server for cloud OpenAI or local OpenAI compatible TTS providers (streaming)
 arch: [amd64, aarch64, armv7, armhf, i386]
 init: false
