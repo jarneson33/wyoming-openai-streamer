@@ -13,7 +13,7 @@ This project builds on [wyoming-piper](https://github.com/rhasspy/wyoming-piper)
 
 1. Add the repository and install Wyoming OpenAI Streamer from the Add-on store:
 
-    [![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Feslavnov%2Fwyoming-openai-streamer)
+    [![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fjarneson33%2Fwyoming-openai-streamer)
 
 1. Configure Wyoming OpenAI Streamer addon settings:
     1. To use OpenAI, you need an API key, [get it here](https://platform.openai.com/settings/organization/api-keys)
