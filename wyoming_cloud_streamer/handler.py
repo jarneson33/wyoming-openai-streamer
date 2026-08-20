@@ -64,7 +64,7 @@ class CloudStreamerEventHandler(AsyncEventHandler):
 
                 voice_name = (
                     (synthesize.voice.name if synthesize.voice else None)
-                    or getattr(self.cli_args, "voice", "en-US-Chirp3-HD-Charon")
+                    or getattr(self.cli_args, "voice", "en-US-openai-alloy")
                 )
 
                 await self._synthesize_with_engine(text, voice_name)
@@ -95,7 +95,7 @@ class CloudStreamerEventHandler(AsyncEventHandler):
                     self._synthesize.text = sentence
                     await self._synthesize_with_engine(
                         sentence,
-                        (self._synthesize.voice.name if self._synthesize.voice else getattr(self.cli_args, "voice", "en-US-Chirp3-HD-Charon")),
+                        (self._synthesize.voice.name if self._synthesize.voice else getattr(self.cli_args, "voice", "en-US-openai-alloy")),
                         # stream path sends start/stop around each sentence as before
                         send_start=True,
                         send_stop=True,
@@ -109,7 +109,7 @@ class CloudStreamerEventHandler(AsyncEventHandler):
                 if final_text:
                     await self._synthesize_with_engine(
                         final_text,
-                        (self._synthesize.voice.name if self._synthesize.voice else getattr(self.cli_args, "voice", "en-US-Chirp3-HD-Charon")),
+                        (self._synthesize.voice.name if self._synthesize.voice else getattr(self.cli_args, "voice", "en-US-openai-alloy")),
                         send_start=True,
                         send_stop=True,
                     )

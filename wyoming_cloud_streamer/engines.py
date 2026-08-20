@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 from typing import AsyncGenerator, Tuple
-from google.cloud import texttospeech_v1 as tts
 from openai import OpenAI
 
 @dataclass
@@ -23,51 +22,6 @@ class BaseTTSEngine:
         self, text: str, voice_name: str, cli_args
     ) -> AsyncGenerator[Tuple[str, object], None]:
         raise NotImplementedError
-
-class GoogleTTSEngine(BaseTTSEngine):
-    """Uses Google Cloud Text-to-Speech streaming_synthesize with LINEAR16 PCM."""
-
-    def _language_code_from_voice(self, voice_name: str) -> str:
-        # Expect "xx-YY-..." and take first two parts
-        parts = voice_name.split("-")
-        return "-".join(parts[:2]) if len(parts) >= 2 else "en-US"
-    
-    def _voice_name_from_voice(self, voice_name: str) -> str:
-        # Expect "xx-YY-zzzz" and return "zzzz"
-        parts = voice_name.split("-")
-        return parts[-1] if parts else voice_name.strip()
-
-    async def stream(
-        self, text: str, voice_name: str, cli_args
-    ) -> AsyncGenerator[Tuple[str, object], None]:
-        client = tts.TextToSpeechClient()
-        language_code = self._language_code_from_voice(voice_name)
-
-        # Build streaming config (first request must carry config)
-        streaming_config = tts.StreamingSynthesizeConfig(
-            voice=tts.VoiceSelectionParams(
-                name=self._voice_name_from_voice(voice_name),
-                language_code=language_code,
-                model_name="gemini-3.1-flash-tts-preview",
-            )
-        )
-        config_request = tts.StreamingSynthesizeRequest(streaming_config=streaming_config)
-
-        def request_iter():
-            yield config_request
-            yield tts.StreamingSynthesizeRequest(
-                input=tts.StreamingSynthesisInput(text=text)
-            )
-
-        # Announce LINEAR16 mono; Google produces LINEAR16 for streaming
-        sample_rate = getattr(cli_args, "sample_rate", 24000)
-        yield ("format", AudioFormat(rate=sample_rate, width=2, channels=1))
-
-        # Forward audio bytes as chunks
-        responses = client.streaming_synthesize(request_iter())
-        for resp in responses:
-            if getattr(resp, "audio_content", None):
-                yield ("chunk", resp.audio_content)
 
 class OpenAITTSEngine(BaseTTSEngine):
     """Uses OpenAI TTS streaming; SDK streams WAV by default, so strip header once."""
@@ -151,16 +105,12 @@ class OpenAITTSEngine(BaseTTSEngine):
 class EngineRegistry:
     def __init__(self) -> None:
         self._engines = {
-            "google": GoogleTTSEngine(),
             "openai": OpenAITTSEngine(),
         }
 
     def pick(self, voice_name: str) -> Tuple[str, BaseTTSEngine, str]:
         """Return (provider, engine, normalized_voice) based on voice_name."""
         v = (voice_name or "").strip().lower()
-        if "-openai-" in v:
-            return ("openai", self._engines["openai"], v)
-        else:
-            return ("google", self._engines["google"], v)
+        return ("openai", self._engines["openai"], v)
 
 ENGINE_REGISTRY = EngineRegistry()

@@ -9,8 +9,7 @@ WORKDIR /app
 COPY . /app
 
 # Install code and deps
-RUN pip install --no-cache-dir . \
- && pip install --no-cache-dir google-cloud-texttospeech
+RUN pip install --no-cache-dir .
 
 # s6 service (provides /etc/services.d/wyoming/run)
 COPY rootfs/ /

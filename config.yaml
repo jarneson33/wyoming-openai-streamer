@@ -1,6 +1,6 @@
 name: Wyoming Cloud Streamer
 slug: wyoming_cloud_streamer
-version: "0.0.10"
+version: "0.0.11"
 description: Wyoming server for cloud TTS providers (streaming)
 arch: [amd64, aarch64, armv7, armhf, i386]
 init: false
@@ -21,13 +21,11 @@ arch:
   - i386
 
 schema:
-  gcp_credentials_path: str?
   openai_model: str? 
   openai_api_key: password?
   openai_base_url: str?
 
 options:
-  gcp_credentials_path: "/config/SERVICE_ACCOUNT.json"
   openai_model: "gpt-4o-mini-tts"
   openai_api_key: ""
   openai_base_url: ""
