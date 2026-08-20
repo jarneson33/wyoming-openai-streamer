@@ -33,7 +33,7 @@ if [ -n "$openai_languages" ]; then
 fi
 
 # Launch your modified Wyoming server.
-exec python -m wyoming_cloud_streamer \
+exec python -m wyoming_openai_streamer \
   --uri "tcp://${host}:${port}" \
   --streaming \
   --debug

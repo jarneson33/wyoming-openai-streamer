@@ -52,7 +52,7 @@ async def main() -> None:
     _LOGGER.debug(args)
 
 
-    with open("/app/wyoming_cloud_streamer/voices.json", "r", encoding="utf-8") as f:
+    with open("/app/wyoming_openai_streamer/voices.json", "r", encoding="utf-8") as f:
         voices_data = json.load(f)
 
     voices = []
@@ -85,10 +85,10 @@ async def main() -> None:
     wyoming_info = Info(
         tts=[
             TtsProgram(
-                name="Cloud TTS Streamer",
-                description="Wyoming streaming proxy for cloud TTS providers",
+                name="OpenAI TTS Streamer",
+                description="Wyoming streaming proxy for cloud OpenAI or local OpenAI-compatible TTS providers",
                 attribution=Attribution(
-                    name="eslavnov", url="https://github.com/eslavnov/wyoming-cloud-streamer"
+                    name="jarneson33", url="https://github.com/jarneson33/wyoming-openai-streamer"
                 ),
                 installed=True,
                 voices=sorted(voices, key=lambda v: v.name),
