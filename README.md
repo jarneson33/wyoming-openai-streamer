@@ -18,6 +18,7 @@ This project builds on [wyoming-piper](https://github.com/rhasspy/wyoming-piper)
 1. Configure Wyoming Cloud Streamer addon settings:
     1. To use Google Cloud TTS, you need a service account json from Google Cloud. Follow [these instructions](https://www.home-assistant.io/integrations/google_cloud/#obtaining-service-account-file), (you need only text-to-speech). Set the correct path in the addon settings (the default is `/config/SERVICE_ACCOUNT.json`)
     2. To use OpenAI, you need an API key, [get it here](https://platform.openai.com/settings/organization/api-keys)
+    3. Optional: set `openai_base_url` to use an OpenAI-compatible local provider instead of the default cloud endpoint
 
 1. Configure Wyoming Protocol in Home Assistant:
     1. Go to Settings => Integrations => Add Integration => Wyoming Protocol
