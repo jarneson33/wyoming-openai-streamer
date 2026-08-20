@@ -1,6 +1,6 @@
 [project]
 name = "wyoming-cloud-streamer"
-version = "0.0.9"
+version = "0.0.10"
 description = "Wyoming protocol server for cloud TTS engines."
 readme = "README.md"
 requires-python = ">=3.8"
