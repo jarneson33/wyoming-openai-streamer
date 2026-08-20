@@ -48,34 +48,25 @@ async def main() -> None:
         voices_data = json.load(f)
 
     voices = []
-    for key in voices_data.keys():
-        for voice in voices_data[key]["voices"]:
-            for language in voices_data[key]["languages"]:
-                voice_name = ""
-                voice_description = ""
-                if key == "google":
-                    voice_name = language.replace('_', '-', 1)+"-"+voice
-                    voice_description = "gemini_"+voice
-                    attribution=Attribution(
-                            name="Google", url="https://cloud.google.com/text-to-speech/docs/chirp3-hd"
-                        )
-                elif key == "openai":
-                    voice_name = language.replace('_', '-', 1)+"-openai-"+voice
-                    voice_description = "openai_"+voice
-                    attribution=Attribution(
-                            name="OpenAI", url="https://platform.openai.com/docs/guides/text-to-speech"
-                        )
-                voices.append(
-                    TtsVoice(
-                        name=voice_name,
-                        description=voice_description,
-                        attribution=attribution,
-                        installed=True,
-                        version=None,
-                        languages=[language],
-                        speakers=None,
-                    )
+    openai_voices = voices_data.get("openai", {})
+    for voice in openai_voices.get("voices", []):
+        for language in openai_voices.get("languages", []):
+            voice_name = language.replace('_', '-', 1) + "-openai-" + voice
+            voice_description = "openai_" + voice
+            attribution = Attribution(
+                name="OpenAI", url="https://platform.openai.com/docs/guides/text-to-speech"
+            )
+            voices.append(
+                TtsVoice(
+                    name=voice_name,
+                    description=voice_description,
+                    attribution=attribution,
+                    installed=True,
+                    version=None,
+                    languages=[language],
+                    speakers=None,
                 )
+            )
 
     wyoming_info = Info(
         tts=[
