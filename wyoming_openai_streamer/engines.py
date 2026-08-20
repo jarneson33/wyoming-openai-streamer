@@ -46,6 +46,23 @@ class OpenAITTSEngine(BaseTTSEngine):
             return 4.0
         return speed
 
+    def _create_client(self) -> OpenAI:
+        api_key = os.getenv("OPENAI_API_KEY", "").strip()
+        base_url = os.getenv("OPENAI_BASE_URL", "").strip()
+
+        client_kwargs = {}
+        if base_url:
+            client_kwargs["base_url"] = base_url
+
+        if api_key:
+            client_kwargs["api_key"] = api_key
+        elif base_url:
+            # Some OpenAI-compatible local providers don't require a real key,
+            # but the SDK expects a non-empty api_key value.
+            client_kwargs["api_key"] = "not-needed"
+
+        return OpenAI(**client_kwargs)
+
     def _parse_voice(self, voice_name: str) -> str:
         # Accept "en-US-openai-alloy" or plain "alloy"
         n = voice_name.strip()
@@ -56,7 +73,7 @@ class OpenAITTSEngine(BaseTTSEngine):
     async def stream(
         self, text: str, voice_name: str, cli_args
     ) -> AsyncGenerator[Tuple[str, object], None]:
-        client = OpenAI()
+        client = self._create_client()
         voice = self._parse_voice(voice_name)
 
         # Resolve model precedence: ENV > default
