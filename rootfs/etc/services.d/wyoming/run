@@ -15,12 +15,21 @@ streaming=$(jq -r '.streaming // true' "$CONFIG_PATH")
 openai_key=$(jq -r '.openai_api_key // ""' "$CONFIG_PATH")
 openai_model=$(jq -r '.openai_model // "gpt-4o-mini-tts"' "$CONFIG_PATH")
 openai_base_url=$(jq -r '.openai_base_url // ""' "$CONFIG_PATH")
+openai_voices=$(jq -r '.openai_voices // ""' "$CONFIG_PATH")
+openai_languages=$(jq -r '.openai_languages // ""' "$CONFIG_PATH")
 
 # Export settings
 export OPENAI_API_KEY="${openai_key}"
 export OPENAI_TTS_MODEL="$openai_model"
+export OPENAI_TTS_SPEED="$speaking_rate"
 if [ -n "$openai_base_url" ]; then
   export OPENAI_BASE_URL="$openai_base_url"
+fi
+if [ -n "$openai_voices" ]; then
+  export OPENAI_TTS_VOICES="$openai_voices"
+fi
+if [ -n "$openai_languages" ]; then
+  export OPENAI_TTS_LANGUAGES="$openai_languages"
 fi
 
 # Launch your modified Wyoming server.

@@ -5,7 +5,7 @@ import json
 import logging
 from functools import partial
 from pathlib import Path
-from typing import Any, Dict, Set
+from typing import Any, Dict, List, Set
 import os
 
 from wyoming.info import Attribution, Info, TtsProgram, TtsVoice, TtsVoiceSpeaker
@@ -15,6 +15,14 @@ from . import __version__
 from .handler import CloudStreamerEventHandler
 
 _LOGGER = logging.getLogger(__name__)
+
+
+def _csv_env_list(name: str) -> List[str]:
+    value = os.getenv(name, "").strip()
+    if not value:
+        return []
+
+    return [item.strip() for item in value.split(",") if item.strip()]
 
 async def main() -> None:
     """Main entry point."""
@@ -49,8 +57,14 @@ async def main() -> None:
 
     voices = []
     openai_voices = voices_data.get("openai", {})
-    for voice in openai_voices.get("voices", []):
-        for language in openai_voices.get("languages", []):
+    configured_voices = _csv_env_list("OPENAI_TTS_VOICES")
+    configured_languages = _csv_env_list("OPENAI_TTS_LANGUAGES")
+
+    voice_list = configured_voices or openai_voices.get("voices", [])
+    language_list = configured_languages or openai_voices.get("languages", [])
+
+    for voice in voice_list:
+        for language in language_list:
             voice_name = language.replace('_', '-', 1) + "-openai-" + voice
             voice_description = "openai_" + voice
             attribution = Attribution(

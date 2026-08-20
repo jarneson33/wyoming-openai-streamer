@@ -18,6 +18,9 @@ This project builds on [wyoming-piper](https://github.com/rhasspy/wyoming-piper)
 1. Configure Wyoming Cloud Streamer addon settings:
     1. To use OpenAI, you need an API key, [get it here](https://platform.openai.com/settings/organization/api-keys)
     2. Optional: set `openai_base_url` to use an OpenAI-compatible local provider instead of the default cloud endpoint
+    3. Optional: set `speaking_rate` as speech speed multiplier (for example `0.8` slower, `1.0` normal, `1.25` faster)
+    4. Optional: set `openai_voices` to a comma-separated list (example: `alloy,ash,my_custom_voice`)
+    5. Optional: set `openai_languages` to a comma-separated list of locale codes (example: `en-US,fr-FR`)
 
 1. Configure Wyoming Protocol in Home Assistant:
     1. Go to Settings => Integrations => Add Integration => Wyoming Protocol
