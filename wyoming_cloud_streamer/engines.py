@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
-from typing import AsyncGenerator, Tuple
+from typing import AsyncGenerator, Optional, Tuple
 from openai import OpenAI
 
 @dataclass
@@ -29,6 +29,23 @@ class OpenAITTSEngine(BaseTTSEngine):
     def __init__(self) -> None:
         self.default_model = "gpt-4o-mini-tts"
 
+    def _parse_speed(self) -> Optional[float]:
+        speed_raw = os.getenv("OPENAI_TTS_SPEED", "").strip()
+        if not speed_raw:
+            return None
+
+        try:
+            speed = float(speed_raw)
+        except ValueError:
+            return None
+
+        # OpenAI speed range
+        if speed < 0.25:
+            return 0.25
+        if speed > 4.0:
+            return 4.0
+        return speed
+
     def _parse_voice(self, voice_name: str) -> str:
         # Accept "en-US-openai-alloy" or plain "alloy"
         n = voice_name.strip()
@@ -44,6 +61,7 @@ class OpenAITTSEngine(BaseTTSEngine):
 
         # Resolve model precedence: ENV > default
         model = os.getenv("OPENAI_TTS_MODEL") or self.default_model
+        speed = self._parse_speed()
 
         # WAV header parsing state
         got_header = False
@@ -68,11 +86,15 @@ class OpenAITTSEngine(BaseTTSEngine):
             return (True, data_offset, sr, ch, (bits // 8) if bits else None)
 
         # Start streaming; no 'format'/'sample_rate' kwargs here
-        with client.audio.speech.with_streaming_response.create(
-            model=model,
-            voice=voice,
-            input=text,
-        ) as resp:
+        request_kwargs = {
+            "model": model,
+            "voice": voice,
+            "input": text,
+        }
+        if speed is not None:
+            request_kwargs["speed"] = speed
+
+        with client.audio.speech.with_streaming_response.create(**request_kwargs) as resp:
             # We'll emit ('format', ...) once we know the real numbers
             for chunk in resp.iter_bytes():
                 if not chunk:
