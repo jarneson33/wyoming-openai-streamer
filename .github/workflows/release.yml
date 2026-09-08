@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - config.yaml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create GitHub release from config.yaml version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read add-on version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION=$(grep -E '^version:' config.yaml | head -n1 | sed -E 's/version:\s*"?([^"[:space:]]+)"?/\1/')
+          if [[ -z "$VERSION" ]]; then
+            echo "Unable to read version from config.yaml"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Check if tag exists
+        id: tag_check
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git rev-parse "${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Tag already exists. Skipping release creation."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create release
+        if: steps.tag_check.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Wyoming OpenAI Streamer ${{ steps.version.outputs.version }}
+          generate_release_notes: true
+          make_latest: true
