@@ -2,9 +2,11 @@
 
 [Wyoming protocol](https://github.com/rhasspy/wyoming) server with streaming support for OpenAI-compatible TTS engines.
 
-Ask ChatGPT to tell you a long story, and you will hear the response audio almost immediately instead of waiting for the whole pipeline to finish.
+Ask ChatGPT or your local OpenAI-compatible TTS engine to tell you a long story, and you will hear the response audio almost immediately instead of waiting for the whole pipeline to finish.
 
 Works with Home Assistant Voice Preview Edition (HAVPE) devices. 
+
+This project was forked from [wyoming-cloud-streamer](https://github.com/eslavnov/wyoming-cloud-streamer) and was refactored to support streaming from Local OpenAI-compatible TTS engines instead of focusing on Cloud TTS. My motivation was to be able to use the kokoro TTS engine from [lemonade](https://github.com/lemonade-sdk/lemonade) with streaming support in Home Assistant.
 
 This project builds on [wyoming-piper](https://github.com/rhasspy/wyoming-piper) by Michael Hansen, licensed under MIT.
 
